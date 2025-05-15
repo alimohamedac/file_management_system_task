@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'signature',
     ];
 
     /**
@@ -42,4 +43,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    public function workflowSlots()
+    {
+        return $this->belongsToMany(WorkflowSlot::class, 'slot_user');
+    }
+    
+    public function slotStatuses()
+    {
+        return $this->hasMany(DocumentSlotStatus::class);
+    }
+    
+    public function createdDocuments()
+    {
+        return $this->hasMany(Document::class, 'created_by');
+    }
 }

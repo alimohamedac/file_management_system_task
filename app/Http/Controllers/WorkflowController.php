@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Repositories\Eloquent\WorkflowRepository;
+use App\Repositories\WorkflowRepository;
 use App\Services\WorkflowService;
 use Illuminate\Http\Request;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Workflow;
-use App\Repositories\Eloquent\DocumentRepository;
+use App\Repositories\DocumentRepository;
 use App\Services\DocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
