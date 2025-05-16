@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     // Workflow routes
+    Route::get('workflows/{id}/details', [WorkflowController::class, 'getDetails'])->name('workflows.details');
     Route::resource('workflows', WorkflowController::class);
 
     // Document routes

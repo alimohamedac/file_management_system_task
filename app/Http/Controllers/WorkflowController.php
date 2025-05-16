@@ -111,8 +111,8 @@ class WorkflowController extends Controller
             'slots.*.description' => 'required|string',
             'slots.*.approval_method' => 'required|in:single,multi',
             'slots.*.parent_slot_id' => 'nullable|exists:workflow_slots,id',
-            'slots.*.user_ids' => 'required|array',
-            'slots.*.user_ids.*' => 'exists:users,id'
+            'slots.*.users' => 'required|array',
+            'slots.*.users.*' => 'exists:users,id'
         ]);
 
         $workflow = $this->workflowService->updateWorkflow($id, $validated);

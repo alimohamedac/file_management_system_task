@@ -77,8 +77,8 @@ class WorkflowService
                         $slot = $workflow->slots()->create($slotAttributes);
                     }
 
-                    if (isset($slotData['user_ids']) && is_array($slotData['user_ids'])) {
-                        $slot->users()->sync($slotData['user_ids']);
+                    if (isset($slotData['users']) && is_array($slotData['users'])) {
+                        $slot->users()->sync($slotData['users']);
                     }
                 }
             }

@@ -3,6 +3,7 @@
 @section('title', 'Edit Workflow')
 
 @section('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .slot-form {
         border: 1px solid #dee2e6;
@@ -14,6 +15,9 @@
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
+    }
+    .select2-container {
+        width: 100% !important;
     }
 </style>
 @endsection
@@ -64,10 +68,20 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let slotCount = 0;
         const existingSlots = @json($existingSlots);
+
+        // Initialize Select2 for a slot
+        function initializeSelect2ForSlot(slotIndex) {
+            const select = $(`#slot-${slotIndex} select[multiple]`);
+            select.select2({
+                placeholder: 'Select users',
+                width: '100%'
+            });
+        }
 
         function createSlotForm(index, slot = null) {
             return `
@@ -129,6 +143,7 @@
         document.getElementById('addSlot').addEventListener('click', function() {
             const container = document.getElementById('slotsContainer');
             container.insertAdjacentHTML('beforeend', createSlotForm(slotCount++));
+            $(`#slot-${slotCount-1} select[multiple]`).select2({placeholder: 'Select users'});
         });
 
         document.getElementById('slotsContainer').addEventListener('click', function(e) {
@@ -143,6 +158,7 @@
         existingSlots.forEach(slot => {
             const container = document.getElementById('slotsContainer');
             container.insertAdjacentHTML('beforeend', createSlotForm(slotCount++, slot));
+            initializeSelect2ForSlot(slotCount-1);
         });
 
         // Add an empty slot if no slots exist

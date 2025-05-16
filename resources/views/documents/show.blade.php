@@ -147,11 +147,12 @@
                                                     <div class="col-md-6">
                                                         <form action="{{ route('documents.approve', $document) }}" method="POST">
                                                             @csrf
+                                                            <input type="hidden" name="slot_id" value="{{ $slot->id }}">
                                                             <div class="mb-3">
                                                                 <label for="comment" class="form-label">Comment (Optional)</label>
-                                                                <textarea name="comment" id="comment" rows="2" 
-                                                                          class="form-control @error('comment') is-invalid @enderror"></textarea>
-                                                                @error('comment')
+                                                                <textarea name="comments" id="comment" rows="2" 
+                                                                          class="form-control @error('comments') is-invalid @enderror"></textarea>
+                                                                @error('comments')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
@@ -164,11 +165,12 @@
                                                     <div class="col-md-6">
                                                         <form action="{{ route('documents.reject', $document) }}" method="POST">
                                                             @csrf
+                                                            <input type="hidden" name="slot_id" value="{{ $slot->id }}">
                                                             <div class="mb-3">
                                                                 <label for="reject_comment" class="form-label">Rejection Reason</label>
-                                                                <textarea name="comment" id="reject_comment" rows="2" 
-                                                                          class="form-control @error('comment') is-invalid @enderror" required></textarea>
-                                                                @error('comment')
+                                                                <textarea name="comments" id="reject_comment" rows="2" 
+                                                                          class="form-control @error('comments') is-invalid @enderror" required></textarea>
+                                                                @error('comments')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
