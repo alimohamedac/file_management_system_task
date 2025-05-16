@@ -34,7 +34,7 @@
                                 @forelse ($documents as $document)
                                     <tr>
                                         <td>
-                                            <div class="fw-bold">{{ $document->name }}</div>
+                                            <div class="fw-bold">{{ $document->subject }}</div>
                                             <div class="text-muted small">{{ $document->description }}</div>
                                         </td>
                                         <td>
@@ -42,11 +42,12 @@
                                         </td>
                                         <td>
                                             @php
-                                                $status = $document->currentWorkflowInstance?->currentStatus ?? 'draft';
+                                                $status = $document->currentWorkflowInstance?->status ?? 'draft';
                                                 $statusClass = match($status) {
-                                                    'approved' => 'bg-success',
+                                                    'completed' => 'bg-success',
                                                     'rejected' => 'bg-danger',
                                                     'pending' => 'bg-warning',
+                                                    'in_progress' => 'bg-secondary',
                                                     default => 'bg-secondary'
                                                 };
                                             @endphp

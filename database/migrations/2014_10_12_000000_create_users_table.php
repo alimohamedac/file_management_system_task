@@ -22,13 +22,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-
-        //seed one user
-        User::create([
-            'name' => 'Ali Mohamed',
-            'email' => 'ali@ali.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('12345678'),
-        ]);
     }
 
     /**

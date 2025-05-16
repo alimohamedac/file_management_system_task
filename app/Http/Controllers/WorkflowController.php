@@ -87,7 +87,18 @@ class WorkflowController extends Controller
         $workflow = $this->workflowService->getWorkflowWithSlots($id);
         $users = User::all();
 
-        return view('workflows.edit', compact('workflow', 'users'));
+        $existingSlots = $workflow->slots->map(function ($slot) {
+            return [
+                'id' => $slot->id,
+                'slot_number' => $slot->slot_number,
+                'description' => $slot->description,
+                'approval_method' => $slot->approval_method,
+                'parent_slot_id' => $slot->parent_slot_id,
+                'users' => $slot->users->pluck('id')->toArray(),
+            ];
+        });
+
+        return view('workflows.edit', compact('workflow', 'users', 'existingSlots'));
     }
 
     public function update(Request $request, $id)

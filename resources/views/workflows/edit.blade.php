@@ -32,7 +32,7 @@
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Workflow Name</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                        <input type="text" class="form-control @error('name') is-invalid @enderror"
                                id="name" name="name" value="{{ old('name', $workflow->name) }}" required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -46,7 +46,7 @@
                                 <i class="fas fa-plus"></i> Add Slot
                             </button>
                         </div>
-                        
+
                         <div id="slotsContainer">
                             <!-- Existing slots will be loaded here -->
                         </div>
@@ -67,16 +67,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let slotCount = 0;
-        const existingSlots = @json($workflow->slots->map(function($slot) {
-            return [
-                'id' => $slot->id,
-                'slot_number' => $slot->slot_number,
-                'description' => $slot->description,
-                'approval_method' => $slot->approval_method,
-                'parent_slot_id' => $slot->parent_slot_id,
-                'users' => $slot->users->pluck('id')->toArray()
-            ];
-        }));
+        const existingSlots = @json($existingSlots);
 
         function createSlotForm(index, slot = null) {
             return `
@@ -84,23 +75,23 @@
                     <button type="button" class="btn btn-danger btn-sm remove-slot" data-slot="${index}">
                         <i class="fas fa-times"></i>
                     </button>
-                    
+
                     ${slot ? `<input type="hidden" name="slots[${index}][id]" value="${slot.id}">` : ''}
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Slot Number</label>
-                            <input type="text" name="slots[${index}][slot_number]" 
-                                   class="form-control" required 
-                                   value="${slot ? slot.slot_number : ''}" 
+                            <input type="text" name="slots[${index}][slot_number]"
+                                   class="form-control" required
+                                   value="${slot ? slot.slot_number : ''}"
                                    placeholder="e.g., 1.0, 1.1, 2.0">
                         </div>
-                        
+
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Description</label>
-                            <input type="text" name="slots[${index}][description]" 
-                                   class="form-control" required 
-                                   value="${slot ? slot.description : ''}" 
+                            <input type="text" name="slots[${index}][description]"
+                                   class="form-control" required
+                                   value="${slot ? slot.description : ''}"
                                    placeholder="e.g., Manager Approval">
                         </div>
                     </div>
@@ -108,12 +99,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Parent Slot (Optional)</label>
-                            <input type="text" name="slots[${index}][parent_slot_id]" 
-                                   class="form-control" 
-                                   value="${slot ? (slot.parent_slot_id || '') : ''}" 
+                            <input type="text" name="slots[${index}][parent_slot_id]"
+                                   class="form-control"
+                                   value="${slot ? (slot.parent_slot_id || '') : ''}"
                                    placeholder="e.g., 1.0">
                         </div>
-                        
+
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Approval Method</label>
                             <select name="slots[${index}][approval_method]" class="form-select" required>

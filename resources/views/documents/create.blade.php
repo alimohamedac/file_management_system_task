@@ -22,11 +22,11 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Document Name</label>
-                                    <input type="text" name="name" id="name" 
-                                           class="form-control @error('name') is-invalid @enderror" 
-                                           value="{{ old('name') }}" required>
-                                    @error('name')
+                                    <label for="subject" class="form-label">Document Name</label>
+                                    <input type="text" name="subject" id="subject"
+                                           class="form-control @error('subject') is-invalid @enderror"
+                                           value="{{ old('subject') }}" required>
+                                    @error('subject')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -35,8 +35,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="file" class="form-label">Document File</label>
-                                    <input type="file" name="file" id="file" 
-                                           class="form-control @error('file') is-invalid @enderror" 
+                                    <input type="file" name="file" id="file"
+                                           class="form-control @error('file') is-invalid @enderror"
                                            accept=".pdf,.doc,.docx,.txt" required>
                                     <div class="form-text">Accepted formats: PDF, DOC, DOCX, TXT</div>
                                     @error('file')
@@ -48,7 +48,7 @@
 
                         <div class="mb-4">
                             <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" rows="3" 
+                            <textarea name="description" id="description" rows="3"
                                       class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -57,7 +57,7 @@
 
                         <div class="mb-4">
                             <label for="workflow_id" class="form-label">Select Workflow</label>
-                            <select name="workflow_id" id="workflow_id" 
+                            <select name="workflow_id" id="workflow_id"
                                     class="form-select @error('workflow_id') is-invalid @enderror">
                                 <option value="">Select a workflow</option>
                                 @foreach($workflows as $workflow)
