@@ -37,7 +37,7 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'subject' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf,doc,docx,txt|max:10240',
             'description' => 'nullable|string',
             'workflow_id' => 'required|exists:workflows,id'

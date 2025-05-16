@@ -31,7 +31,7 @@ class DocumentService
 
             // Create document record
             $document = $this->documentRepository->create([
-                'subject' => $data['name'],
+                'subject' => $data['subject'],
                 'description' => $data['description'] ?? null,
                 'doc_path' => $path,
                 'status' => 'pending',
