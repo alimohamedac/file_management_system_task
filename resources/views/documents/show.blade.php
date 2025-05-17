@@ -9,9 +9,9 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">{{ $document->name }}</h1>
                 <div>
-                    <a href="{{ route('documents.download', $document) }}" class="btn btn-outline-primary me-2">
+                    {{--<a href="{{ route('documents.download', $document) }}" class="btn btn-outline-primary me-2">
                         <i class="fas fa-download me-1"></i> Download Document
-                    </a>
+                    </a>--}}
                     <a href="{{ route('documents.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Back to Documents
                     </a>
@@ -150,7 +150,7 @@
                                                             <input type="hidden" name="slot_id" value="{{ $slot->id }}">
                                                             <div class="mb-3">
                                                                 <label for="comment" class="form-label">Comment (Optional)</label>
-                                                                <textarea name="comments" id="comment" rows="2" 
+                                                                <textarea name="comments" id="comment" rows="2"
                                                                           class="form-control @error('comments') is-invalid @enderror"></textarea>
                                                                 @error('comments')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -168,7 +168,7 @@
                                                             <input type="hidden" name="slot_id" value="{{ $slot->id }}">
                                                             <div class="mb-3">
                                                                 <label for="reject_comment" class="form-label">Rejection Reason</label>
-                                                                <textarea name="comments" id="reject_comment" rows="2" 
+                                                                <textarea name="comments" id="reject_comment" rows="2"
                                                                           class="form-control @error('comments') is-invalid @enderror" required></textarea>
                                                                 @error('comments')
                                                                     <div class="invalid-feedback">{{ $message }}</div>

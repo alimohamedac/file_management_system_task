@@ -59,9 +59,9 @@
                                                 <a href="{{ route('documents.show', $document) }}" class="btn btn-sm btn-outline-primary" title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('documents.download', $document) }}" class="btn btn-sm btn-outline-info" title="Download">
+                                                {{--<a href="{{ route('documents.download', $document) }}" class="btn btn-sm btn-outline-info" title="Download">
                                                     <i class="fas fa-download"></i>
-                                                </a>
+                                                </a>--}}
                                                 @if(!$document->currentWorkflowInstance)
                                                     <form action="{{ route('documents.destroy', $document) }}" method="POST" class="d-inline">
                                                         @csrf

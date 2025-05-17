@@ -87,10 +87,10 @@ class DocumentController extends Controller
         return redirect()->back()->with('success', 'Document rejected successfully.');
     }
 
-    public function download($id)
+    /*public function download($id)
     {
         $document = $this->documentRepository->find($id);
 
         return Storage::download($document->doc_path);
-    }
+    }*/
 }

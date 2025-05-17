@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('pending-approvals', [DocumentController::class, 'pendingApprovals'])->name('documents.pending-approvals');
     Route::post('documents/{document}/approve', [DocumentController::class, 'approve'])->name('documents.approve');
     Route::post('documents/{document}/reject', [DocumentController::class, 'reject'])->name('documents.reject');
-    Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+   // Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
 });
 
 Route::middleware('auth')->group(function () {
