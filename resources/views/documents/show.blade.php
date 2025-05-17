@@ -202,18 +202,18 @@
             @endif
 
             <!-- Workflow History -->
-            @if(($document->workflowInstances ?? collect())->count() > 1)
+            @php
+                $instances = $document->workflowInstances;
+                $hasHistory = $instances && $instances->count() > 0;
+            @endphp
+            @if($hasHistory)
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Workflow History</h5>
                     </div>
                     <div class="card-body">
                         <div class="timeline">
-                            @php
-                                $instances = $document->workflowInstances ?? collect();
-                                $sortedInstances = $instances->sortByDesc('created_at')->skip(1);
-                            @endphp
-                            @foreach($sortedInstances as $instance)
+                            @foreach($instances as $instance)
                                 <div class="timeline-item pb-4">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div class="me-3">
@@ -237,6 +237,7 @@
                                     </div>
                                 </div>
                             @endforeach
+
                         </div>
                     </div>
                 </div>

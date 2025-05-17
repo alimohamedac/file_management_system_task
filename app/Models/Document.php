@@ -26,7 +26,7 @@ class Document extends Model
     
     public function workflowInstances()
     {
-        return $this->hasMany(DocumentWorkflowInstance::class);
+        return $this->hasMany(DocumentWorkflowInstance::class)->with(['workflow', 'slotStatuses.workflowSlot', 'slotStatuses.user']);
     }
     
     public function currentWorkflowInstance()
