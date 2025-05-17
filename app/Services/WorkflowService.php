@@ -24,17 +24,26 @@ class WorkflowService
                 'name' => $data['name']
             ]);
 
-            if (isset($data['slots']) && is_array($data['slots'])) {
+            $createdSlots = [];
+
+            if (!empty($data['slots'])) {
                 foreach ($data['slots'] as $slotData) {
-                    $slot = $workflow->slots()->create([
+                    $createdSlots[$slotData['slot_number']] = $workflow->slots()->create([
                         'slot_number' => $slotData['slot_number'],
                         'description' => $slotData['description'],
                         'approval_method' => $slotData['approval_method'],
-                        'parent_slot_id' => $slotData['parent_slot_id'] ?? null
                     ]);
+                }
 
-                    if (isset($slotData['users']) && is_array($slotData['users'])) {
-                        $this->workflowRepository->attachUsersToSlot($slot->id, $slotData['users']);
+                foreach ($data['slots'] as $slotData) {
+                    $slot = $createdSlots[$slotData['slot_number']];
+                    $parentSlotNumber = $slotData['parent_slot_number'] ?? null;
+                    $parentSlot = $parentSlotNumber ? $createdSlots[$parentSlotNumber] ?? null : null;
+
+                    $slot->update(['parent_slot_id' => $parentSlot?->id]);
+
+                    if (!empty($slotData['users'])) {
+                        $slot->users()->sync($slotData['users']);
                     }
                 }
             }
@@ -56,30 +65,39 @@ class WorkflowService
                 'name' => $data['name']
             ]);
 
-            if (isset($data['slots']) && is_array($data['slots'])) {
-                // Remove existing slots not in the update data
-                $existingSlotIds = collect($data['slots'])->pluck('id')->filter();
-                $workflow->slots()->whereNotIn('id', $existingSlotIds)->delete();
+            $existingSlotIds = collect($data['slots'])->pluck('id')->filter()->toArray();
+            $workflow->slots()->whereNotIn('id', $existingSlotIds)->delete();
 
-                foreach ($data['slots'] as $slotData) {
-                    $slotId = $slotData['id'] ?? null;
-                    $slotAttributes = [
-                        'slot_number' => $slotData['slot_number'],
-                        'description' => $slotData['description'],
-                        'approval_method' => $slotData['approval_method'],
-                        'parent_slot_id' => $slotData['parent_slot_id'] ?? null
-                    ];
+            $savedSlots = [];
 
-                    if ($slotId) {
-                        $slot = $workflow->slots()->findOrFail($slotId);
-                        $slot->update($slotAttributes);
-                    } else {
-                        $slot = $workflow->slots()->create($slotAttributes);
-                    }
+            foreach ($data['slots'] as $slotData) {
+                $slotId = $slotData['id'] ?? null;
 
-                    if (isset($slotData['users']) && is_array($slotData['users'])) {
-                        $slot->users()->sync($slotData['users']);
-                    }
+                $slotAttributes = [
+                    'slot_number' => $slotData['slot_number'],
+                    'description' => $slotData['description'],
+                    'approval_method' => $slotData['approval_method'],
+                ];
+
+                if ($slotId) {
+                    $slot = $workflow->slots()->where('id', $slotId)->firstOrFail();
+                    $slot->update($slotAttributes);
+                } else {
+                    $slot = $workflow->slots()->create($slotAttributes);
+                }
+
+                $savedSlots[$slotData['slot_number']] = $slot;
+            }
+
+            foreach ($data['slots'] as $slotData) {
+                $slot = $savedSlots[$slotData['slot_number']];
+                $parentSlotNumber = $slotData['parent_slot_number'] ?? null;
+                $parentSlot = $parentSlotNumber ? $savedSlots[$parentSlotNumber] ?? null : null;
+
+                $slot->update(['parent_slot_id' => $parentSlot?->id]);
+
+                if (!empty($slotData['users'])) {
+                    $slot->users()->sync($slotData['users']);
                 }
             }
 

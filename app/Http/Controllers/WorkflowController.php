@@ -39,7 +39,7 @@ class WorkflowController extends Controller
             'slots.*.slot_number' => 'required|string',
             'slots.*.description' => 'required|string',
             'slots.*.approval_method' => 'required|in:single,multi',
-            'slots.*.parent_slot_id' => 'nullable|string',
+            'slots.*.parent_slot_number' => 'nullable|exists:workflow_slots,slot_number',
             'slots.*.users' => 'required|array',
             'slots.*.users.*' => 'exists:users,id'
         ]);
@@ -85,15 +85,20 @@ class WorkflowController extends Controller
     public function edit($id)
     {
         $workflow = $this->workflowService->getWorkflowWithSlots($id);
-        $users = User::all();
+        $users = User::all()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+            ];
+        });
 
-        $existingSlots = $workflow->slots->map(function ($slot) {
+        $existingSlots = $workflow->slots->map(function ($slot) use ($workflow) {
             return [
                 'id' => $slot->id,
                 'slot_number' => $slot->slot_number,
                 'description' => $slot->description,
                 'approval_method' => $slot->approval_method,
-                'parent_slot_id' => $slot->parent_slot_id,
+                'parent_slot_number' => optional($workflow->slots->firstWhere('id', $slot->parent_slot_id))->slot_number,
                 'users' => $slot->users->pluck('id')->toArray(),
             ];
         });
@@ -110,7 +115,7 @@ class WorkflowController extends Controller
             'slots.*.slot_number' => 'required|string',
             'slots.*.description' => 'required|string',
             'slots.*.approval_method' => 'required|in:single,multi',
-            'slots.*.parent_slot_id' => 'nullable|exists:workflow_slots,id',
+            'slots.*.parent_slot_number' => 'nullable|exists:workflow_slots,slot_number',
             'slots.*.users' => 'required|array',
             'slots.*.users.*' => 'exists:users,id'
         ]);

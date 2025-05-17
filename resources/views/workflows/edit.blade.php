@@ -73,6 +73,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         let slotCount = 0;
         const existingSlots = @json($existingSlots);
+        const users = @json($users);
 
         // Initialize Select2 for a slot
         function initializeSelect2ForSlot(slotIndex) {
@@ -84,6 +85,12 @@
         }
 
         function createSlotForm(index, slot = null) {
+            let userOptions = '';
+            users.forEach(user => {
+                const isSelected = slot && slot.users.includes(user.id) ? 'selected' : '';
+                userOptions += `<option value="${user.id}" ${isSelected}>${user.name}</option>`;
+            });
+
             return `
                 <div class="slot-form position-relative mb-3" id="slot-${index}">
                     <button type="button" class="btn btn-danger btn-sm remove-slot" data-slot="${index}">
@@ -113,9 +120,9 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Parent Slot (Optional)</label>
-                            <input type="text" name="slots[${index}][parent_slot_id]"
+                            <input type="text" name="slots[${index}][parent_slot_number]"
                                    class="form-control"
-                                   value="${slot ? (slot.parent_slot_id || '') : ''}"
+                                   value="${slot ? (slot.parent_slot_number || '') : ''}"
                                    placeholder="e.g., 1.0">
                         </div>
 
@@ -131,9 +138,7 @@
                     <div class="mb-3">
                         <label class="form-label">Assigned Users</label>
                         <select name="slots[${index}][users][]" class="form-select" multiple required>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" ${slot && slot.users.includes({{ $user->id }}) ? 'selected' : ''}>{{ $user->name }}</option>
-                            @endforeach
+                            ${userOptions}
                         </select>
                     </div>
                 </div>
