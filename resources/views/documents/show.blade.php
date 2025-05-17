@@ -116,18 +116,26 @@
                                                 default => 'bg-secondary'
                                             };
                                         @endphp
-                                        <span class="badge {{ $statusClass }}">
-                                            {{ $slotStatus ? ucfirst($slotStatus->status) : 'Pending' }}
-                                        </span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge {{ $statusClass }}">
+                                                {{ $slotStatus ? ucfirst($slotStatus->status) : 'Pending' }}
+                                            </span>
+                                            @if($slotStatus && $slotStatus->signed_at)
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    {{ \Carbon\Carbon::parse($slotStatus->signed_at)->format('M d, Y H:i') }}
+                                                </small>
+                                            @endif
+                                        </div>
 
                                         @if($slotStatus && $slotStatus->user)
                                             <div class="mt-3 pt-3 border-top">
-                                                <div class="d-flex align-items-center text-muted small">
+                                                {{--<div class="d-flex align-items-center text-muted small">
                                                     <i class="fas fa-user-check me-2"></i>
                                                     <span>Action by {{ $slotStatus->user?->name }}</span>
                                                     <i class="fas fa-clock ms-3 me-2"></i>
                                                     <span>{{ $slotStatus->updated_at?->format('M d, Y H:i') }}</span>
-                                                </div>
+                                                </div>--}}
 
                                                 @if($slotStatus->comment)
                                                     <div class="mt-2">
@@ -140,8 +148,11 @@
 
                                         @php
                                             $isCompleted = $document->currentWorkflowInstance?->isCompleted() ?? false;
+                                            $canShowActions = $slot->isCurrentSlotForUser(Illuminate\Support\Facades\Auth::user()) && 
+                                                            ($slotStatus === null || $slotStatus->signed_at === null) && 
+                                                            !$isCompleted;
                                         @endphp
-                                        @if($slot->isCurrentSlotForUser(Auth::user()) && !$isCompleted)
+                                        @if($canShowActions)
                                             <div class="mt-3 pt-3 border-top">
                                                 <div class="row g-3">
                                                     <div class="col-md-6">

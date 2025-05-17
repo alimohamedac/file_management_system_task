@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Workflow;
-use App\Models\WorkflowSlot;
 
 class WorkflowRepository
 {
@@ -47,21 +46,5 @@ class WorkflowRepository
         return $this->model->with(['slots' => function ($query) {
             $query->orderBy('slot_number');
         }, 'slots.users'])->findOrFail($id);
-    }
-
-    public function attachUsersToSlot($slotId, array $userIds)
-    {
-        $slot = WorkflowSlot::findOrFail($slotId);
-        $slot->users()->syncWithoutDetaching($userIds);
-
-        return $slot;
-    }
-
-    public function detachUsersFromSlot($slotId, array $userIds)
-    {
-        $slot = WorkflowSlot::findOrFail($slotId);
-        $slot->users()->detach($userIds);
-
-        return $slot;
     }
 }
