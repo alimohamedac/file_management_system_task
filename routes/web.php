@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('workflows');
+    return redirect()->route('documents.pending-approvals');
 });
 
 Route::middleware(['auth'])->group(function () {

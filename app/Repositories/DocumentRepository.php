@@ -44,11 +44,24 @@ class DocumentRepository
 
     public function getPendingApprovals($userId)
     {
-        return $this->model->whereHas('workflowInstances.slotStatuses', function ($query) use ($userId) {
-            $query->where('user_id', $userId)
-                  ->where('status', 'pending');
-        })->with(['workflowInstances.workflow', 'workflowInstances.slotStatuses.workflowSlot'])
-          ->get();
+        return $this->model
+            ->whereHas('currentWorkflowInstance.slotStatuses', function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->where('status', 'pending')
+                    ->whereNull('signed_at');
+            })
+            ->with([
+                'creator',
+                'currentWorkflowInstance.workflow.slots',
+                'currentWorkflowInstance.slotStatuses' => function ($query) use ($userId) {
+                    $query->where('user_id', $userId)
+                        ->where('status', 'pending')
+                        ->whereNull('signed_at')
+                        ->distinct();
+                },
+                'currentWorkflowInstance.slotStatuses.workflowSlot'
+            ])
+            ->get();
     }
 
     public function getDocumentHistory($id)

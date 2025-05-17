@@ -59,7 +59,6 @@ class DocumentController extends Controller
     public function pendingApprovals()
     {
         $documents = $this->documentService->getPendingApprovals(auth()->id());
-
         return view('documents.pending-approvals', compact('documents'));
     }
 
